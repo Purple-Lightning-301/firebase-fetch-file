@@ -5,21 +5,27 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 const storage = getStorage();
 function App() {
+  const [loading, setLoading] = useState(false);
   const [n, setN] = useState("");
   const [k, setK] = useState("");
+  const [evalPoint, setEvalPoint] = useState("ISAL");
+
   const [fileUrl, setFileUrl] = useState("");
   const [fileError, setFileError] = useState("");
 
   const getFileUrl = () => {
-    getDownloadURL(ref(storage, `n${n}k${k}.txt`))
+    setLoading(true);
+    getDownloadURL(ref(storage, `${evalPoint}_output_n${n}k${k}.txt`))
       .then((url) => {
         console.log(url);
         setFileUrl(url);
         setFileError("");
+        setLoading(false);
       })
       .catch((err) => {
         setFileError(errorParser(err?.code));
         setFileUrl("");
+        setLoading(false);
       });
   };
 
@@ -30,6 +36,10 @@ function App() {
   const handleChangeK = (e) => {
     setK(e.target.value);
   };
+
+  const handleChangeEvalPoint = (e) => {
+    setEvalPoint(e.target.value);
+  }
 
   const errorParser = (errCode) => {
     if (errCode == "storage/object-not-found") {
@@ -43,28 +53,52 @@ function App() {
     <div className="App">
       <div className="d-flex px-3 py-3">
         <div style={{ minWidth: "300px" }} className="px-3">
+          <p>Record of Lowest-Bandwidth Repair Schemes for short-length Reed-Solomon codes</p>
           <div className="d-flex w-100 justify-content-between mt-2">
-            <div>Input N = </div>
-            <input
-              className="ms-2"
-              type="text"
-              value={n}
-              onChange={handleChangeN}
-            ></input>
+            <label htmlFor="eval_point_selection">Evaluation points:</label>
+            <select className='px-3' id="eval_point_selection" onChange={handleChangeEvalPoint}>
+              <option value={'ISAL'} className="p-2">ISAL</option>
+              <option value={'F16'} className="p-2">F16</option>
+            </select>
           </div>
           <div className="d-flex w-100 justify-content-between mt-2">
-            <div>Input K = </div>
-            <input
-              className="ms-2"
-              type="text"
-              value={k}
-              onChange={handleChangeK}
-            ></input>
+            <div>Input n = </div>
+            <div className='d-flex justify-content-between w-75'>
+              <input
+                className="ms-2"
+                type="text"
+                value={n}
+                onChange={handleChangeN}
+              ></input>
+              <div>(4 ≤ n ≤ 16)</div>
+            </div>
           </div>
-          <div className="mt-2">
+          <div className="d-flex w-100 justify-content-between mt-2">
+            <div>Input k = </div>
+            <div className='d-flex justify-content-between w-75'>
+              <input
+                className="ms-2"
+                type="text"
+                value={k}
+                onChange={handleChangeK}
+              ></input>
+              <div>(n-4 ≤ k ≤ n-2)</div>
+            </div>
+          </div>
+          <div className="mt-2 pb-4" style={{borderBottom: '1px solid black'}}>
             <button className="rounded" onClick={getFileUrl}>
-              Submit
+              {
+                loading == true
+                ? 'Loading...'
+                : 'Submit'
+              }
             </button>
+          </div>
+          <div>
+              <ul>
+                <li>Feedback sent to <a href="mailto:sonhoangdau@rmit.edu.au">sonhoangdau@rmit.edu.au</a></li>
+                <li>Reference: X.Dinh et al, "Practical in repairing Reed-Solomon Codes" </li>
+              </ul>
           </div>
         </div>
         <div

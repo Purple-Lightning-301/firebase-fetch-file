@@ -1,12 +1,13 @@
 import {initializeApp} from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB3PUY6tg3pJD4M-RFpEuBDfYdSOXWteMQ",
-  authDomain: "get-file-txt.firebaseapp.com",
-  projectId: "get-file-txt",
-  storageBucket: "get-file-txt.appspot.com",
-  messagingSenderId: "673249211395",
-  appId: "1:673249211395:web:fed182195369ea06b54a36"
+  apiKey: "AIzaSyC4LUBvl1GNklfPUY_xpk25dMr3ZYALPpg",
+  authDomain: "repairreedsolomoncodes.firebaseapp.com",
+  projectId: "repairreedsolomoncodes",
+  storageBucket: "repairreedsolomoncodes.appspot.com",
+  messagingSenderId: "787662527376",
+  appId: "1:787662527376:web:f0a13f8f176ecca86ff115",
+  measurementId: "G-RSGBMZ4LGL"
 };
 
 export const app = initializeApp(firebaseConfig);
